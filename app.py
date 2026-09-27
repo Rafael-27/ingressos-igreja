@@ -7,7 +7,7 @@ app = Flask(__name__)
 EVENTOS = {
     "face_a_face": {
         "id": "face_a_face",
-        "nome": "Face a Face com Deus",
+        "nome": "Face a Face com Deus 2026",
         "preco_display": "R$ 50,00",
         "banner": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=500", # Troque pela URL da arte do evento
         "pix_copia_cola": "00020126580014br.gov.bcb.pix01360543c85d-5d00-4244-ba94-e2c0cf8feea2520400005303986540550.005802BR5925RAFAEL DOUGLAS FERNANDES 6014BELO HORIZONTE62070503***630462CF"
