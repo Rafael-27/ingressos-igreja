@@ -62,7 +62,7 @@ def inscricao(id_evento):
         except Exception as e:
             print("Erro ao salvar na planilha:", e)
 
-        whatsapp_igreja = "5511999999999" 
+        whatsapp_igreja = "5531991809494" 
         return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja, nome=nome, telefone=telefone)
 
     return render_template('inscricao.html', evento=evento_escolhido)
