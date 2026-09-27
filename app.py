@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
-import requests # Nova biblioteca para enviar dados para a planilha
+import requests
+from datetime import datetime, timedelta # <-- Nova importação para lidar com data e hora
 
 app = Flask(__name__)
 
@@ -27,39 +28,38 @@ EVENTOS = {
 def index():
     return render_template('index.html', eventos=EVENTOS.values())
 
-# NOVA ROTA: Formulário de Inscrição
 @app.route('/inscricao/<id_evento>', methods=['GET', 'POST'])
 def inscricao(id_evento):
     evento_escolhido = EVENTOS.get(id_evento)
     if not evento_escolhido:
         return "Evento não encontrado", 404
 
-    # Se o usuário preencheu e enviou o formulário
     if request.method == 'POST':
         nome = request.form.get('nome')
         sobrenome = request.form.get('sobrenome')
         telefone = request.form.get('telefone')
 
-        # Envia os dados para a planilha do Google via SheetDB
+        # Captura a hora UTC atual do servidor (EUA) e diminui 3 horas para o fuso do Brasil (BRT)
+        agora_brasil = datetime.utcnow() - timedelta(hours=3)
+        data_hora_formatada = agora_brasil.strftime("%d/%m/%Y %H:%M:%S") # Formato: 27/09/2026 14:30:00
+
         payload = {
             "data": {
                 "Nome": nome,
                 "Sobrenome": sobrenome,
                 "Telefone": telefone,
-                "Evento": evento_escolhido['nome']
+                "Evento": evento_escolhido['nome'],
+                "Data_Hora": data_hora_formatada  # <-- Enviando o novo dado para a planilha
             }
         }
         try:
             requests.post(SHEETDB_URL, json=payload)
         except Exception as e:
             print("Erro ao salvar na planilha:", e)
-            # Num MVP, não vamos travar o usuário se a planilha falhar. Ele segue pro pagamento.
 
-        # Passamos os dados do usuário para a página de pagamento (para o botão do WhatsApp)
         whatsapp_igreja = "5531991809494" 
         return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja, nome=nome, telefone=telefone)
 
-    # Se for requisição GET (apenas acessando o link), mostra o formulário vazio
     return render_template('inscricao.html', evento=evento_escolhido)
 
 if __name__ == '__main__':
