@@ -12,21 +12,14 @@ EVENTOS = {
         "nome": "Face a Face com Deus 2026",
         "preco_display": "R$ 50,00",
         "banner": "/static/face_a_face.jpeg", 
-        "pix_copia_cola": "SEU_PIX_AQUI"
-    },
-    "casais": {
-        "id": "casais",
-        "nome": "Encontro de Casais",
-        "preco_display": "R$ 120,00",
-        "banner": "/static/casais.jpeg", 
-        "pix_copia_cola": "SEU_PIX_AQUI"
+        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139"
     },
     "ieq_fit": {
         "id": "ieq_fit",
         "nome": "Ieq Fit",
         "preco_display": "R$ 35,00",
         "banner": "/static/ieq_fit.jpeg",
-        "pix_copia_cola": "SEU_PIX_AQUI"
+        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139"
     }
 }
 
