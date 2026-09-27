@@ -56,7 +56,7 @@ def inscricao(id_evento):
             # Num MVP, não vamos travar o usuário se a planilha falhar. Ele segue pro pagamento.
 
         # Passamos os dados do usuário para a página de pagamento (para o botão do WhatsApp)
-        whatsapp_igreja = "5531993298465" 
+        whatsapp_igreja = "5531991809494" 
         return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja, nome=nome, telefone=telefone)
 
     # Se for requisição GET (apenas acessando o link), mostra o formulário vazio
