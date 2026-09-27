@@ -23,6 +23,14 @@ EVENTOS = {
         "banner": "/static/ieq_fit.jpeg",
         "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139",
         "tem_camisa": False # <--- Desativado
+    },
+    "davi: {
+        "id": "davi",
+        "nome": "Davi tombo de bicicleta",
+        "preco_display": "R$ 50,00",
+        "banner": "/static/ieq_fit.jpeg",
+        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139",
+        "tem_camisa": False # <--- Desativado
     }
 }
 
