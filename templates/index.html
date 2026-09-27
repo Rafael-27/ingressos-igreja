@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos da Igreja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+    <div class="max-w-md mx-auto p-4">
+        <h1 class="text-2xl font-bold text-center text-gray-800 my-6">Próximos Eventos</h1>
+        
+        <div class="space-y-4">
+            {% for evento in eventos %}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <img src="{{ evento.banner }}" alt="{{ evento.nome }}" class="w-full h-40 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold text-gray-800">{{ evento.nome }}</h2>
+                    <p class="text-gray-600 mt-1">Valor: <span class="font-bold text-green-600">{{ evento.preco_display }}</span></p>
+                    <a href="/evento/{{ evento.id }}" class="mt-4 block w-full bg-blue-600 text-white text-center py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+                        Comprar Ingresso
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - {{ evento.nome }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function copiarPix() {
+            var pixTexto = document.getElementById("pix-codigo").innerText;
+            navigator.clipboard.writeText(pixTexto).then(() => {
+                alert("Código PIX copiado com sucesso! Cole no aplicativo do seu banco.");
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+    <div class="max-w-md mx-auto p-4">
+        <a href="/" class="text-blue-600 font-medium mb-4 inline-block">&larr; Voltar</a>
+        
+        <div class="bg-white rounded-xl shadow-md p-6 text-center">
+            <h1 class="text-2xl font-bold text-gray-800">{{ evento.nome }}</h1>
+            <p class="text-lg text-gray-600 mt-2">Total a pagar: <span class="font-bold text-green-600">{{ evento.preco_display }}</span></p>
+            
+            <div class="my-6">
+                <p class="text-sm text-gray-500 mb-2">Escaneie o QR Code abaixo:</p>
+                <!-- API geradora de QR Code embutida, pegando o código PIX como parâmetro -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ evento.pix_copia_cola }}" alt="QR Code PIX" class="mx-auto border p-2 rounded-lg shadow-sm">
+            </div>
+
+            <div class="mb-6">
+                <p class="text-sm text-gray-500 mb-2">Ou use o PIX Copia e Cola:</p>
+                <div class="bg-gray-100 p-3 rounded text-xs break-all border font-mono text-left" id="pix-codigo">
+                    {{ evento.pix_copia_cola }}
+                </div>
+                <button onclick="copiarPix()" class="mt-2 w-full bg-gray-800 text-white py-2 rounded-lg font-medium hover:bg-gray-900 transition">
+                    📋 Copiar Código PIX
+                </button>
+            </div>
+
+            <hr class="my-4">
+            
+            <h3 class="font-semibold text-gray-800 mb-2">Já fez o pagamento?</h3>
+            <p class="text-sm text-gray-600 mb-4">Para confirmar sua inscrição, envie o comprovante para nossa equipe.</p>
+            <a href="https://wa.me/{{ whatsapp }}?text=Ol%C3%A1%2C%20acabei%20de%20pagar%20o%20ingresso%20para%20o%20{{ evento.nome }}%20({{ evento.preco_display }}).%20Segue%20meu%20comprovante:" 
+               target="_blank" 
+               class="block w-full bg-green-500 text-white text-center py-3 rounded-lg font-bold hover:bg-green-600 transition">
+                💬 Enviar Comprovante no WhatsApp
+            </a>
+        </div>
+    </div>
+</body>
+</html>
