@@ -13,14 +13,16 @@ EVENTOS = {
         "nome": "Face a Face com Deus 2026",
         "preco_display": "R$ 50,00",
         "banner": "/static/face_a_face.jpeg", 
-        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139"
+        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139",
+        "tem_camisa": True # <--- ATIVAMOS A CAMISA PARA ESTE EVENTO
     },
     "ieq_fit": {
         "id": "ieq_fit",
         "nome": "IEQ Fit",
         "preco_display": "R$ 50,00",
         "banner": "/static/ieq_fit.jpeg",
-        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139"
+        "pix_copia_cola": "00020126360014br.gov.bcb.pix011462955505245275520400005303986540550.005802BR5925IGREJA DO EVANGELHO QUADR6008CONTAGEM62070503***6304E139",
+        "tem_camisa": False # <--- Desativado
     }
 }
 
@@ -38,10 +40,12 @@ def inscricao(id_evento):
         nome = request.form.get('nome')
         sobrenome = request.form.get('sobrenome')
         telefone = request.form.get('telefone')
+        
+        # Captura o tamanho da camisa. Se o evento não tiver camisa, envia um traço "-"
+        tamanho_camisa = request.form.get('tamanho_camisa', '-')
 
-        # Captura a hora UTC atual do servidor (EUA) e diminui 3 horas para o fuso do Brasil (BRT)
         agora_brasil = datetime.utcnow() - timedelta(hours=3)
-        data_hora_formatada = agora_brasil.strftime("%d/%m/%Y %H:%M:%S") # Formato: 27/09/2026 14:30:00
+        data_hora_formatada = agora_brasil.strftime("%d/%m/%Y %H:%M:%S") 
 
         payload = {
             "data": {
@@ -49,7 +53,8 @@ def inscricao(id_evento):
                 "Sobrenome": sobrenome,
                 "Telefone": telefone,
                 "Evento": evento_escolhido['nome'],
-                "Data_Hora": data_hora_formatada  # <-- Enviando o novo dado para a planilha
+                "Data_Hora": data_hora_formatada,
+                "Tamanho_Camisa": tamanho_camisa # <--- Nova coluna mapeada
             }
         }
         try:
@@ -57,7 +62,7 @@ def inscricao(id_evento):
         except Exception as e:
             print("Erro ao salvar na planilha:", e)
 
-        whatsapp_igreja = "5531991809494" 
+        whatsapp_igreja = "5511999999999" 
         return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja, nome=nome, telefone=telefone)
 
     return render_template('inscricao.html', evento=evento_escolhido)
