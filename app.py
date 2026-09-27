@@ -1,49 +1,73 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import requests # Nova biblioteca para enviar dados para a planilha
 
 app = Flask(__name__)
 
-# Nosso "Banco de Dados" em memória. 
-# IMPORTANTE: Gere os códigos PIX Copia e Cola no app do seu banco com os valores exatos e substitua abaixo.
+# Coloque aqui a URL que o SheetDB gerou para você
+SHEETDB_URL = "https://sheetdb.io/api/v1/0pq8m9lx5a0d9"
+
 EVENTOS = {
     "face_a_face": {
         "id": "face_a_face",
         "nome": "Face a Face com Deus 2026",
         "preco_display": "R$ 50,00",
-        "banner": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=500", # Troque pela URL da arte do evento
-        "pix_copia_cola": "00020126580014br.gov.bcb.pix01360543c85d-5d00-4244-ba94-e2c0cf8feea2520400005303986540550.005802BR5925RAFAEL DOUGLAS FERNANDES 6014BELO HORIZONTE62070503***630462CF"
+        "banner": "/static/face_a_face.jpeg", 
+        "pix_copia_cola": "SEU_PIX_AQUI"
     },
     "casais": {
         "id": "casais",
         "nome": "Encontro de Casais",
-        "preco_display": "R$ 50,00",
-        "banner": "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500",
-        "pix_copia_cola": "COLE_AQUI_O_PIX_ESTATICO_DE_50_REAIS"
+        "preco_display": "R$ 120,00",
+        "banner": "/static/casais.jpeg", 
+        "pix_copia_cola": "SEU_PIX_AQUI"
     },
     "ieq_fit": {
         "id": "ieq_fit",
-        "nome": "IEQ Fit",
-        "preco_display": "R$ 50,00",
-        "banner": "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500",
-        "pix_copia_cola": "COLE_AQUI_O_PIX_ESTATICO_DE_50_REAIS"
+        "nome": "Ieq Fit",
+        "preco_display": "R$ 35,00",
+        "banner": "/static/ieq_fit.jpeg",
+        "pix_copia_cola": "SEU_PIX_AQUI"
     }
 }
 
-# Rota Principal: Lista os eventos
 @app.route('/')
 def index():
     return render_template('index.html', eventos=EVENTOS.values())
 
-# Rota de Pagamento: Mostra o PIX específico do evento escolhido
-@app.route('/evento/<id_evento>')
-def evento(id_evento):
+# NOVA ROTA: Formulário de Inscrição
+@app.route('/inscricao/<id_evento>', methods=['GET', 'POST'])
+def inscricao(id_evento):
     evento_escolhido = EVENTOS.get(id_evento)
     if not evento_escolhido:
         return "Evento não encontrado", 404
-    
-    # Número do WhatsApp da igreja (apenas números, com código do país 55)
-    whatsapp_igreja = "5511999999999" 
-    
-    return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja)
+
+    # Se o usuário preencheu e enviou o formulário
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        sobrenome = request.form.get('sobrenome')
+        telefone = request.form.get('telefone')
+
+        # Envia os dados para a planilha do Google via SheetDB
+        payload = {
+            "data": {
+                "Nome": nome,
+                "Sobrenome": sobrenome,
+                "Telefone": telefone,
+                "Evento": evento_escolhido['nome']
+            }
+        }
+        try:
+            requests.post(SHEETDB_URL, json=payload)
+        except Exception as e:
+            print("Erro ao salvar na planilha:", e)
+            # Num MVP, não vamos travar o usuário se a planilha falhar. Ele segue pro pagamento.
+
+        # Passamos os dados do usuário para a página de pagamento (para o botão do WhatsApp)
+        whatsapp_igreja = "5511999999999" 
+        return render_template('evento.html', evento=evento_escolhido, whatsapp=whatsapp_igreja, nome=nome, telefone=telefone)
+
+    # Se for requisição GET (apenas acessando o link), mostra o formulário vazio
+    return render_template('inscricao.html', evento=evento_escolhido)
 
 if __name__ == '__main__':
     app.run(debug=True)
